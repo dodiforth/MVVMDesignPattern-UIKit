@@ -13,6 +13,7 @@
  */
 
 import UIKit
+import Combine
 
 class LoginViewController: UIViewController {
 
@@ -21,6 +22,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     // 👇 instance of the ViewModel <- meaning View is aware of the ViewModel!(Why? Because it need to be able to connect with the attributes that are in the ViewModel)
     private let viewModel = LoginViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,13 +35,13 @@ class LoginViewController: UIViewController {
     // This is where this function below to come in 👇
     private func setupBinders() {
         //Bind to whatever the objects it wants to listens to
-        viewModel.error.bind { [weak self] error in
+        viewModel.$error.sink { [weak self] error in
             if let error = error {
                 print(error)
             } else {
                 self?.goToFirstPage()
             }
-        }
+        }.store(in: &cancellables)
     }
     
     @IBAction func loginButtonTapped(_ sender: UIButton) {

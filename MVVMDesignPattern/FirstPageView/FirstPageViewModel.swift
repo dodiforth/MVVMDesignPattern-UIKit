@@ -5,17 +5,17 @@
 //  Created by Dowon Kim on 05/08/2023.
 //
 
-import Foundation
+import UIKit
 
 final class FirstPageViewModel {
     
     //Remember! the viewModel is going to contain properties, attributes and methods that are related to the view!
     //So it doesn't need to bring whatever it doesn't need.
-    var welcomeMessage: ObservableObject<String?> = ObservableObject(nil)
+    @Published var welcomeMessage: String?
     
     func getLoggedInUser() {
         let user = NetworkService.shared.getLoggedInUser()
-        self.welcomeMessage.value = "Welcome, \(user.firstName) \(user.lastName) !"
+        self.welcomeMessage = "Welcome, \(user.firstName) \(user.lastName) !"
     }
     
 }

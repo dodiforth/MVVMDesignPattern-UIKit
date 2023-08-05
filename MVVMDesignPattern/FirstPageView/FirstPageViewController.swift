@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class FirstPageViewController: UIViewController {
 
@@ -13,7 +14,8 @@ class FirstPageViewController: UIViewController {
     
     // Reference to its viewModel
     private let viewModel = FirstPageViewModel()
-    
+    private var cancellables: Set<AnyCancellable> = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,9 +24,9 @@ class FirstPageViewController: UIViewController {
     }
     
     private func setupBinders() {
-        viewModel.welcomeMessage.bind { [weak self] message in
+        viewModel.$welcomeMessage.sink { [weak self] message in
             self?.mainLabel.text = message
-        }
+        }.store(in: &cancellables)
     }
     
 }
